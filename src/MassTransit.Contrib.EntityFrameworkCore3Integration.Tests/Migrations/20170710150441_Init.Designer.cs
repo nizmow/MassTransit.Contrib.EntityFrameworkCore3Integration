@@ -1,0 +1,56 @@
+﻿// Copyright 2007-2019 Chris Patterson, Dru Sellers, Travis Smith, et. al.
+// Modifications copyright 2019 Neil Houghton.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+// this file except in compliance with the License. You may obtain a copy of the
+// License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software distributed
+// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND, either express or implied. See the License for the
+// specific language governing permissions and limitations under the License.
+
+using System;
+using MassTransit.Contrib.EntityFrameworkCore3Integration.Tests;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+namespace MassTransit.EntityFrameworkCore3Integration.Tests.Migrations
+{
+    using EntityFrameworkCore3Integration.Tests;
+
+
+    [DbContext(typeof(SimpleSagaDbContext))]
+    [Migration("20170710150441_Init")]
+    partial class Init
+    {
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .HasAnnotation("ProductVersion", "1.1.1")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("MassTransit.Tests.Saga.SimpleSaga", b =>
+                {
+                    b.Property<Guid>("CorrelationId");
+
+                    b.Property<bool>("Completed");
+
+                    b.Property<bool>("Initiated");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(40);
+
+                    b.Property<bool>("Observed");
+
+                    b.HasKey("CorrelationId");
+
+                    b.ToTable("EfCoreSimpleSagas");
+                });
+        }
+    }
+}
