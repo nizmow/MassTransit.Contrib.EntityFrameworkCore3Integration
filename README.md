@@ -5,3 +5,5 @@ It's more or less a drop-in replacement for the existing EFCore provider, docume
 ### ISSUES
 
 * The EFCore 2.2 `EntityFrameworkSagaRepository` has the capability to provide a custom query which applies on the saga instance, this capability has been removed.
+* Support for .NET Framework 4.6.1 has been dropped.
+
