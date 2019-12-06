@@ -8,6 +8,5 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Install tools'
   inputs:
-    command: 'tool'
-    arguments: 'restore'
-
+    command: 'custom'
+    custom: 'tool restore'
