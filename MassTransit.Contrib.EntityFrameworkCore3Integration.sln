@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Contrib.EntityFrameworkCore3Integration", "src\MassTransit.Contrib.EntityFrameworkCore3Integration\MassTransit.Contrib.EntityFrameworkCore3Integration.csproj", "{D0D5EA19-28FB-49D7-BB28-5E0366C653CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Contrib.EntityFrameworkCore3Integration.Tests", "src\MassTransit.Contrib.EntityFrameworkCore3Integration.Tests\MassTransit.Contrib.EntityFrameworkCore3Integration.Tests.csproj", "{827648BA-11A6-4E2E-866F-127C95881D4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{D0D5EA19-28FB-49D7-BB28-5E0366C653CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0D5EA19-28FB-49D7-BB28-5E0366C653CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0D5EA19-28FB-49D7-BB28-5E0366C653CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{827648BA-11A6-4E2E-866F-127C95881D4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{827648BA-11A6-4E2E-866F-127C95881D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{827648BA-11A6-4E2E-866F-127C95881D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{827648BA-11A6-4E2E-866F-127C95881D4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
