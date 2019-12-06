@@ -29,17 +29,17 @@ namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
         [Test]
         public async Task Should_have_consume_audit_records()
         {
-            var consumed = this._harness.Consumed;
+            var consumed = _harness.Consumed;
             await Task.Delay(500);
-            (await this.GetAuditRecords("Consume")).ShouldBe(consumed.Count());
+            (await GetAuditRecords("Consume")).ShouldBe(consumed.Count());
         }
 
         [Test]
         public async Task Should_have_send_audit_record()
         {
-            var sent = this._harness.Sent;
+            var sent = _harness.Sent;
             await Task.Delay(500);
-            (await this.GetAuditRecords("Send")).ShouldBe(sent.Count());
+            (await GetAuditRecords("Send")).ShouldBe(sent.Count());
         }
 
         [SetUp]
@@ -64,35 +64,35 @@ namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
                         m.MigrationsHistoryTable("__AuditEFMigrationHistoryAudit");
                     });
 
-            this._store = new EntityFrameworkAuditStore(optionsBuilder.Options, "EfCoreAudit");
-            using (var dbContext = this._store.AuditContext)
+            _store = new EntityFrameworkAuditStore(optionsBuilder.Options, "EfCoreAudit");
+            using (var dbContext = _store.AuditContext)
             {
                 await dbContext.Database.MigrateAsync();
                 await dbContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE EfCoreAudit");
             }
 
-            this._harness = new InMemoryTestHarness();
-            this._harness.OnConnectObservers += bus =>
+            _harness = new InMemoryTestHarness();
+            _harness.OnConnectObservers += bus =>
             {
-                bus.ConnectSendAuditObservers(this._store);
-                bus.ConnectConsumeAuditObserver(this._store);
+                bus.ConnectSendAuditObservers(_store);
+                bus.ConnectConsumeAuditObserver(_store);
             };
-            this._consumer = this._harness.Consumer<TestConsumer>();
+            _consumer = _harness.Consumer<TestConsumer>();
 
-            await this._harness.Start();
+            await _harness.Start();
 
-            await this._harness.InputQueueSendEndpoint.Send(new A());
+            await _harness.InputQueueSendEndpoint.Send(new A());
         }
 
         [OneTimeTearDown]
         public async Task Teardown()
         {
-            await this._harness.Stop();
+            await _harness.Stop();
         }
 
         async Task<int> GetAuditRecords(string contextType)
         {
-            using (var dbContext = this._store.AuditContext)
+            using (var dbContext = _store.AuditContext)
                 return await dbContext.Set<AuditRecord>()
                     .Where(x => x.ContextType == contextType)
                     .CountAsync();

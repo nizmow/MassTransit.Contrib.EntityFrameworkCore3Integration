@@ -14,7 +14,7 @@ namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
         public UpdateSagaDependency(Guid correlationId, string propertyValue)
             : base(correlationId)
         {
-            this.Name = propertyValue;
+            Name = propertyValue;
         }
 
         public string Name { get; set; }

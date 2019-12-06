@@ -18,10 +18,10 @@ namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
 
         public Task Consume(ConsumeContext<InitiateSimpleSaga> context)
         {
-            this.CorrelationId = context.Message.CorrelationId;
-            this.Initiated = true;
-            this.Name = context.Message.Name;
-            this.Dependency = new SagaDependency
+            CorrelationId = context.Message.CorrelationId;
+            Initiated = true;
+            Name = context.Message.Name;
+            Dependency = new SagaDependency
             {
                 SagaInnerDependency = new SagaInnerDependency()
             };
@@ -33,8 +33,8 @@ namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
 
         public Task Consume(ConsumeContext<UpdateSagaDependency> context)
         {
-            this.Dependency.SagaInnerDependency.Name = context.Message.Name;
-            this.Completed = true;
+            Dependency.SagaInnerDependency.Name = context.Message.Name;
+            Completed = true;
             return Task.CompletedTask;
         }
     }

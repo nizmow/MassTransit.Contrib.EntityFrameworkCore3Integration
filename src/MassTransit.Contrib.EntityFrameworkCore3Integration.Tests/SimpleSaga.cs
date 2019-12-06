@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MassTransit.Contrib.EntityFrameworkCore3Integration.Tests.Messages;
 using MassTransit.Saga;
 
-namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests.Shared
+namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
 {
     public class SimpleSaga :
         InitiatedBy<InitiateSimpleSaga>,

@@ -37,7 +37,7 @@ namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
 
             await InputQueueSendEndpoint.Send(message);
 
-            Guid? foundId = await this._sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
+            Guid? foundId = await _sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
 
             foundId.HasValue.ShouldBe(true);
 
@@ -45,7 +45,7 @@ namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
 
             await InputQueueSendEndpoint.Send(nextMessage);
 
-            foundId = await this._sagaRepository.Value.ShouldContainSaga(x => x.CorrelationId == sagaId && x.Completed, TestTimeout);
+            foundId = await _sagaRepository.Value.ShouldContainSaga(x => x.CorrelationId == sagaId && x.Completed, TestTimeout);
 
             foundId.HasValue.ShouldBe(true);
         }
@@ -58,7 +58,7 @@ namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
 
             await InputQueueSendEndpoint.Send(message);
 
-            Guid? foundId = await this._sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
+            Guid? foundId = await _sagaRepository.Value.ShouldContainSaga(message.CorrelationId, TestTimeout);
 
             foundId.HasValue.ShouldBe(true);
         }
@@ -78,14 +78,14 @@ namespace MassTransit.Contrib.EntityFrameworkCore3Integration.Tests
                 context.Database.Migrate();
             }
 
-            this._sagaDbContextFactory = () => contextFactory.CreateDbContext(Array.Empty<string>());
-            this._sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() =>
-                EntityFrameworkSagaRepository<SimpleSaga>.CreatePessimistic(this._sagaDbContextFactory));
+            _sagaDbContextFactory = () => contextFactory.CreateDbContext(Array.Empty<string>());
+            _sagaRepository = new Lazy<ISagaRepository<SimpleSaga>>(() =>
+                EntityFrameworkSagaRepository<SimpleSaga>.CreatePessimistic(_sagaDbContextFactory));
         }
 
         protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
         {
-            configurator.Saga(this._sagaRepository.Value);
+            configurator.Saga(_sagaRepository.Value);
         }
     }
 }
