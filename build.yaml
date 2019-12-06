@@ -12,8 +12,8 @@ steps:
     custom: 'tool'
     arguments: 'restore'
 - task: DotNetCoreCLI@2
-  displayName: 'Install tools'
+  displayName: 'Cake build and test'
   inputs:
     command: 'custom'
     custom: 'cake'
-    arguments: '--target=Build'
+    arguments: '--target=Test'
