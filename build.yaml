@@ -9,5 +9,5 @@ steps:
   displayName: 'Install tools'
   inputs:
     command: 'custom'
-    arguments: 'custom'
-    custom: 'tool restore'
+    custom: 'tool'
+    arguments: 'restore'
