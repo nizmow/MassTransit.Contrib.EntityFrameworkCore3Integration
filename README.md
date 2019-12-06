@@ -5,3 +5,13 @@ It's more or less a drop-in replacement for the existing EFCore provider, docume
 ### ISSUES
 
 * The EFCore 2.2 `EntityFrameworkSagaRepository` has the capability to provide a custom query which applies on the saga instance, this capability has been removed.
+* Support for .NET Framework 4.6.1 has been dropped.
+
+## Building
+
+* Install .NET Core 3.1 or higher.
+* Clone this repository.
+* Install the required dotnet tools from the manifest with `dotnet tool restore`.
+* Build with `dotnet cake --target=Build`.
+
+...or just load the solution into your favourite editor.
