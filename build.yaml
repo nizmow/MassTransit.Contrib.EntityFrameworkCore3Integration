@@ -5,9 +5,9 @@ pool:
   vmImage: 'windows-2019'
 
 steps:
-- task: GitVersion@4
-  displayName: 'GitVersion'
+- task: GitVersion@5
   inputs:
+    runtime: 'core'
     updateAssemblyInfo: true
 - bash: |
     echo '##vso[task.setvariable variable=DOTNET_SKIP_FIRST_TIME_EXPERIENCE]true'
