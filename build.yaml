@@ -27,7 +27,8 @@ steps:
   displayName: 'Restore'
   inputs:
     command: 'restore'
-    arguments: '--configuration Release'
+    feedsToUse: 'select'
+    verbosityRestore: 'Normal'
 - task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
@@ -39,6 +40,7 @@ steps:
     command: 'test'
     arguments: '--no-restore --configuration Release'
 - task: DotNetCoreCLI@2
+  displayName: 'Pack'
   inputs:
     command: 'pack'
     packagesToPack: 'src/MassTransit.Contrib.EntityFrameworkCore3Integration/MassTransit.Contrib.EntityFrameworkCore3Integration.csproj'
@@ -50,10 +52,11 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
-# - task: NuGetCommand@2
-#   inputs:
-#     command: 'push'
-#     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-#     nuGetFeedType: 'external'
-#     publishFeedCredentials: 'NuGet'
-#     verbosityPush: 'Normal'
+- task: NuGetCommand@2
+  displayName: 'Push to NuGet'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'NuGet'
+    verbosityPush: 'Normal'
