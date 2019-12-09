@@ -13,7 +13,7 @@ steps:
   displayName: 'Use .NET Core SDK'
   inputs:
     packageType: sdk
-    version: 2.1.100
+    version: 2.1.600
     installationPath: $(Agent.ToolsDirectory)/dotnet
 - task: DotNetCoreCLI@2
   displayName: 'Nuget Retore'
