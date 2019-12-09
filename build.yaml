@@ -5,10 +5,10 @@ pool:
   vmImage: 'windows-2019'
 
 steps:
-- task: GitVersion@5
+
+- task: GitVersion@4
   displayName: 'Set version'
   inputs:
-    runtime: 'core'
     updateAssemblyInfo: true
 - bash: |
     echo '##vso[build.updatebuildnumber]$(GitVersion.SemVer)'
