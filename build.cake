@@ -1,8 +1,7 @@
+#tool "nuget:?package=GitVersion.CommandLine&version=5.1.2"
+
 var target = Argument("target", "Build");
 var configuration = Argument("configuration", "Release");
-
-var outputDirectory = "./artifacts";
-var versionSuffix = "";
 
 class ProjectInformation
 {
@@ -11,7 +10,9 @@ class ProjectInformation
     public bool IsTestProject { get; set; }
 }
 
+var outputDirectory = "./artifacts";
 List<ProjectInformation> projects;
+GitVersion versionInfo;
 
 Setup(context =>
 {
@@ -21,26 +22,13 @@ Setup(context =>
         FullPath = p.FullPath,
         IsTestProject = p.GetFilenameWithoutExtension().ToString().EndsWith(".Tests")
     }).ToList();
-    
-    if (BuildSystem.IsLocalBuild && string.IsNullOrEmpty(versionSuffix))
-    {
-        versionSuffix = "local";
-    }
-    
-    if (configuration != "Release")
-    {
-        if (string.IsNullOrEmpty(versionSuffix))
-        {
-            versionSuffix += "-";
-        }
-        else
-        {
-            versionSuffix += ".";
-        }
-        versionSuffix += configuration.ToLowerInvariant();
-    }
-    
-    Information($"Building with suffix {versionSuffix}");
+
+    // set our build server environment variables for things like pretty build version    
+    GitVersion(new GitVersionSettings {
+        OutputType = GitVersionOutput.BuildServer
+    });
+    // load the gitversion info into a variable for use in our script
+    versionInfo = GitVersion();
 });
 
 Task("Clean")
@@ -107,7 +95,7 @@ Task("Pack")
          OutputDirectory = outputDirectory,
          NoBuild = true,
          NoRestore = true,
-         VersionSuffix = versionSuffix
+         MSBuildSettings = new DotNetCoreMSBuildSettings().SetVersion(versionInfo.NuGetVersion)
      };
      
      foreach (var project in projects.Where(p => !p.IsTestProject))

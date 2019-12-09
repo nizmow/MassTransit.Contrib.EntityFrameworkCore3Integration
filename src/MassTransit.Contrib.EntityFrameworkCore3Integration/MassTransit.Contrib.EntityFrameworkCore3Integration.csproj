@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <LangVersion>8</LangVersion>
-        <VersionPrefix>6.0.0</VersionPrefix>
         <TargetFramework>netstandard2.0</TargetFramework>
         <Authors>Neil Houghton</Authors>
         <PackageProjectUrl>https://github.com/nizmow/MassTransit.Contrib.EntityFrameworkCore3Integration</PackageProjectUrl>
