@@ -6,9 +6,10 @@ pool:
 
 steps:
 
-- task: GitVersion@4
+- task: GitVersion@5
   displayName: 'Set version'
   inputs:
+    runtime: 'core'
     updateAssemblyInfo: true
 - bash: |
     echo '##vso[build.updatebuildnumber]$(GitVersion.SemVer)'
