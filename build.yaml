@@ -1,6 +1,9 @@
 pr:
 - master
 
+pool:
+  vmImage: 'ubuntu-18.04'
+
 steps:
 - task: UseDotNet@2
   displayName: 'Use .NET Core SDK'
