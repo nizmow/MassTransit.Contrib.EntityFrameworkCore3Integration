@@ -1,78 +1,73 @@
 pr:
-- master
+  - master
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: "windows-2019"
 
 steps:
-- bash: |
-    echo '##vso[task.setvariable variable=DOTNET_SKIP_FIRST_TIME_EXPERIENCE]true'
-    echo '##vso[task.setvariable variable=DOTNET_CLI_TELEMETRY_OPTOUT]true'
-  displayName: "Disable some .NET Core telemetry and cache setup"
-- task: UseDotNet@2
-  displayName: 'Install SDK'
-  inputs:
-    packageType: sdk
-    version: 2.1.x
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-- task: DotNetCoreCLI@2
-  displayName: 'Install gitversion'
-  inputs:
-    command: 'custom'
-    custom: 'tool'
-    arguments: 'install -g gitversion.tool'
-- task: DotNetCoreCLI@2
-  displayName: 'Gitversion setup'
-  inputs:
-    command: 'custom'
-    custom: 'gitversion'
-    arguments: '/output buildserver'
-# - task: gitversion-setup@5
-#   inputs:
-#     versionSpec: '5.1.2'
-# - task: gitversion-execute@5
-#   inputs:
-#     additionalArguments: '/output buildserver'
-- bash: |
-    echo '##vso[build.updatebuildnumber]$(GitVersion.SemVer)'
-  displayName: "Set build number"
-- task: DotNetCoreCLI@2
-  displayName: 'Restore'
-  inputs:
-    command: 'restore'
-    feedsToUse: 'select'
-    verbosityRestore: 'Normal'
-- task: DotNetCoreCLI@2
-  displayName: 'Build'
-  inputs:
-    command: 'build'
-    arguments: '--no-restore --configuration Release'
-- task: DotNetCoreCLI@2
-  displayName: 'Test'
-  inputs:
-    command: 'test'
-    arguments: '--no-restore --configuration Release'
-- task: DotNetCoreCLI@2
-  displayName: 'Pack'
-  inputs:
-    command: 'pack'
-    packagesToPack: 'src/MassTransit.Contrib.EntityFrameworkCore3Integration/MassTransit.Contrib.EntityFrameworkCore3Integration.csproj'
-    configuration: 'Release'
-    nobuild: true
-    includesymbols: true
-    versioningScheme: 'byEnvVar'
-    versionEnvVar: 'GitVersion.SemVer'
-    verbosityPack: 'Normal'
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-- task: NuGetCommand@2
-  displayName: 'Push to NuGet'
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'NuGet'
-    verbosityPush: 'Normal'
+  - bash: |
+      echo '##vso[task.setvariable variable=DOTNET_SKIP_FIRST_TIME_EXPERIENCE]true'
+      echo '##vso[task.setvariable variable=DOTNET_CLI_TELEMETRY_OPTOUT]true'
+    displayName: "Disable some .NET Core telemetry and cache setup"
+  - task: UseDotNet@2
+    displayName: "Install SDK"
+    inputs:
+      packageType: sdk
+      version: 2.1.x
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+  - task: DotNetCoreCLI@2
+    displayName: "Install gitversion"
+    inputs:
+      command: "custom"
+      custom: "tool"
+      arguments: "install -g gitversion.tool"
+  - task: DotNetCoreCLI@2
+    displayName: "Set up version environment"
+    inputs:
+      command: "custom"
+      custom: "gitversion"
+      arguments: "/output buildserver"
+  - bash: |
+      echo '##vso[build.updatebuildnumber]$(GitVersion.SemVer)'
+    displayName: "Set build number"
+  - task: DotNetCoreCLI@2
+    displayName: "Restore"
+    inputs:
+      command: "restore"
+      feedsToUse: "select"
+      verbosityRestore: "Normal"
+  - task: DotNetCoreCLI@2
+    displayName: "Build"
+    inputs:
+      command: "build"
+      arguments: "--no-restore --configuration Release"
+  - task: DotNetCoreCLI@2
+    displayName: "Test"
+    inputs:
+      command: "test"
+      arguments: "--no-restore --configuration Release"
+  - task: DotNetCoreCLI@2
+    displayName: "Pack"
+    inputs:
+      command: "pack"
+      packagesToPack: "src/MassTransit.Contrib.EntityFrameworkCore3Integration/MassTransit.Contrib.EntityFrameworkCore3Integration.csproj"
+      configuration: "Release"
+      nobuild: true
+      includesymbols: true
+      versioningScheme: "byEnvVar"
+      versionEnvVar: "GitVersion.SemVer"
+      verbosityPack: "Normal"
+  - task: PublishBuildArtifacts@1
+    displayName: "Save artifacts"
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      ArtifactName: "drop"
+      publishLocation: "Container"
+  - task: NuGetCommand@2
+    displayName: "Push to NuGet"
+    inputs:
+      command: "push"
+      packagesToPush: "$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg"
+      nuGetFeedType: "external"
+      publishFeedCredentials: "NuGet"
+      verbosityPush: "Normal"
