@@ -40,11 +40,14 @@ steps:
     command: 'test'
     arguments: '--no-restore --configuration Release'
 - task: DotNetCoreCLI@2
-  displayName: 'Pack'
   inputs:
     command: 'pack'
     packagesToPack: 'src/MassTransit.Contrib.EntityFrameworkCore3Integration/MassTransit.Contrib.EntityFrameworkCore3Integration.csproj'
-    versioningScheme: 'byBuildNumber'
+    configuration: 'Release'
+    nobuild: true
+    includesymbols: true
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'GitVersion.NuGetVersion'
     verbosityPack: 'Normal'
 - task: PublishBuildArtifacts@1
   displayName: 'Save artifacts'
