@@ -15,12 +15,24 @@ steps:
     packageType: sdk
     version: 2.1.x
     installationPath: $(Agent.ToolsDirectory)/dotnet
-- task: gitversion-setup@5
+- task: DotNetCoreCLI@2
+  displayName: 'Install gitversion'
   inputs:
-    versionSpec: '5.1.2'
-- task: gitversion-execute@5
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install -g gitversion.tool'
+- task: DotNetCoreCLI@2
+  displayName: 'Gitversion setup'
   inputs:
-    additionalArguments: '/output buildserver'
+    command: 'custom'
+    custom: 'gitversion'
+    arguments: '/output buildserver'
+# - task: gitversion-setup@5
+#   inputs:
+#     versionSpec: '5.1.2'
+# - task: gitversion-execute@5
+#   inputs:
+#     additionalArguments: '/output buildserver'
 - bash: |
     echo '##vso[build.updatebuildnumber]$(GitVersion.SemVer)'
   displayName: "Set build number"
