@@ -11,7 +11,7 @@ steps:
     runtime: 'core'
     updateAssemblyInfo: true
 - bash: |
-    echo '##vso[build.updatebuildnumber]$(GitVersion.NuGetVersion)'
+    echo '##vso[build.updatebuildnumber]$(GitVersion.SemVer)'
   displayName: "Set build number"
 - bash: |
     echo '##vso[task.setvariable variable=DOTNET_SKIP_FIRST_TIME_EXPERIENCE]true'
@@ -48,7 +48,7 @@ steps:
     nobuild: true
     includesymbols: true
     versioningScheme: 'byEnvVar'
-    versionEnvVar: 'GitVersion.NuGetVersion'
+    versionEnvVar: 'GitVersion.SemVer'
     verbosityPack: 'Normal'
 - task: PublishBuildArtifacts@1
   inputs:
